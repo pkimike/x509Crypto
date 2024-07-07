@@ -1,24 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net4.7.2;net6.0</TargetFrameworks>
-	  <LangVersion>10.0</LangVersion>
+    <TargetFrameworks>net4.7.2;net8.0</TargetFrameworks>
+	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <OutputPath>..\..\bin\API</OutputPath>
     <Description>Lets you easily and securely encrypt and recover text expressions and files in your .NET programs using X509 digital certificates and private keys. No prior experience with certificates required!</Description>
-    <Copyright>2020 X509Crypto.org</Copyright>
-    <Version>1.3.0</Version>
-    <PackageVersion>1.3.0</PackageVersion>
+    <Copyright>2024 X509Crypto.org</Copyright>
+    <Version>24.7.1</Version>
+    <PackageVersion>24.7.1</PackageVersion>
     <Authors>Mike Bruno</Authors>
     <Company>X509Crypto.org</Company>
     <RepositoryUrl>https://github.com/MikeBrunoCISSP/x509Crypto</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>encryption privacy crypto pki certificate confidentiality</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyName>Org.X509Crypto</AssemblyName>
-    <RootNamespace>Org.X509Crypto</RootNamespace>
+    <AssemblyName>X509Crypto</AssemblyName>
+    <RootNamespace>X509Crypto</RootNamespace>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>logo_small.png</PackageIcon>
     <SignAssembly>true</SignAssembly>
@@ -31,29 +31,22 @@
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
-    <DocumentationFile>..\..\bin\API\netcoreapp3.1\Org.X509Crypto.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\API\net8.0\Org.X509Crypto.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net4.6.2|AnyCPU'">
-    <DocumentationFile>..\..\bin\API\net4.6.2\Org.X509Crypto.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\API\net4.7.2\Org.X509Crypto.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <DocumentationFile>..\..\bin\API\netstandard2.0\Org.X509Crypto.xml</DocumentationFile>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net4.6.2|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net4.7.2|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.DirectoryServices" Version="5.0.0" />
-    <PackageReference Include="System.Text.Json" Version="7.0.3" />
+    <PackageReference Include="System.DirectoryServices" Version="7.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

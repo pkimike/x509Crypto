@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using Org.X509Crypto.Dto;
 
 namespace Org.X509Crypto.Services;
@@ -37,14 +38,14 @@ public class EncryptionService : IDisposable {
 
     public byte[] DecryptData(EncryptedSecretDto dto) {
         byte[] symmetricKey = _keyPair.PrivateKey.Decrypt(dto.EncryptedKey, RSAEncryptionPadding.OaepSHA384);
-
-        using AesManaged aes = new AesManaged {
-            KeySize = KEY_SIZE,
-            BlockSize = BLOCK_SIZE,
-            Mode = CipherMode.CBC,
-            Key = symmetricKey,
-            IV = dto.InitializationVector
-        };
+        using Aes aes = createEncryptor(symmetricKey, dto.InitializationVector);
+        //using AesManaged aes = new AesManaged {
+        //    KeySize = KEY_SIZE,
+        //    BlockSize = BLOCK_SIZE,
+        //    Mode = CipherMode.CBC,
+        //    Key = symmetricKey,
+        //    IV = dto.InitializationVector
+        //};
 
         using MemoryStream inStream = new MemoryStream(dto.Data);
         inStream.Seek(0, SeekOrigin.Begin);
@@ -89,7 +90,7 @@ public class EncryptionService : IDisposable {
     }
 
     public string DecryptText(EncryptedSecretDto dto) {
-        string payLoad = string.Empty;
+        string result = string.Empty;
         byte[] symmetricKey = _keyPair.PrivateKey.Decrypt(dto.EncryptedKey, RSAEncryptionPadding.OaepSHA384);
 
         using var decryptor = AesCryptDto.CreateDecryptor(symmetricKey, dto.InitializationVector);
@@ -111,27 +112,39 @@ public class EncryptionService : IDisposable {
         outStream.Position = 0;
 
         using var reader = new StreamReader(outStream);
-        payLoad = reader.ReadToEnd();
+        result = reader.ReadToEnd();
         cryptStream.Close();
         outStream.Close();
 
-        return payLoad;
+        return result;
     }
 
     public byte[] EncryptFile(string inFile) {
         var fInfo = new FileInfo(inFile);
-        var payLoad = new EncryptedFileDto {
+        var result = new EncryptedFileDto {
             Data = EncryptData(File.ReadAllBytes(inFile)),
             OriginalExtension = fInfo.Extension,
             OriginalFileName = fInfo.Name
         };
-
-        return payLoad.ToByteArray();
+        var json = JsonSerializer.Serialize(result);
+        return Encoding.UTF8.GetBytes(json);
     }
     public byte[] DecryptFile(string inFile) {
         byte[] data = File.ReadAllBytes(inFile);
-        var dto = data.ToObject<EncryptedFileDto>();
+        string json = Encoding.UTF8.GetString(data);
+        var dto = JsonSerializer.Deserialize<EncryptedFileDto>(json);
         return DecryptData(dto.Data);
+    }
+
+    Aes createEncryptor(byte[] symmetricKey, byte[] iv) {
+        var result = Aes.Create();
+        result.KeySize = KEY_SIZE;
+        result.BlockSize = BLOCK_SIZE;
+        result.Mode = CipherMode.CBC;
+        result.Key = symmetricKey;
+        result.IV = iv;
+
+        return result;
     }
 
     public void Dispose() {
